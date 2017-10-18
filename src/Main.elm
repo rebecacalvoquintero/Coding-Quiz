@@ -34,4 +34,5 @@ initialModel =
     , patients = []
     , pageSize = 10
     , currentPage = 0
+    , sorting = None
     }

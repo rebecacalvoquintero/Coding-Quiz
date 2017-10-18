@@ -11260,19 +11260,32 @@ var _justinmimbs$elm_date_extra$Date_Extra$equalBy = F3(
 	});
 var _justinmimbs$elm_date_extra$Date_Extra$Second = {ctor: 'Second'};
 var _justinmimbs$elm_date_extra$Date_Extra$Millisecond = {ctor: 'Millisecond'};
-var _user$project$Model$Model = F4(
-	function (a, b, c, d) {
-		return {searchInput: a, patients: b, pageSize: c, currentPage: d};
+var _user$project$Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {searchInput: a, patients: b, pageSize: c, currentPage: d, sorting: e};
 	});
 var _user$project$Model$Patient = F3(
 	function (a, b, c) {
 		return {lastName: a, firstName: b, dob: c};
 	});
+var _user$project$Model$None = {ctor: 'None'};
+var _user$project$Model$Desc = function (a) {
+	return {ctor: 'Desc', _0: a};
+};
+var _user$project$Model$Asc = function (a) {
+	return {ctor: 'Asc', _0: a};
+};
+var _user$project$Model$Dob = {ctor: 'Dob'};
+var _user$project$Model$LastName = {ctor: 'LastName'};
+var _user$project$Model$FirstName = {ctor: 'FirstName'};
 var _user$project$Messages$SetPatients = function (a) {
 	return {ctor: 'SetPatients', _0: a};
 };
 var _user$project$Messages$PreviousPage = {ctor: 'PreviousPage'};
 var _user$project$Messages$NextPage = {ctor: 'NextPage'};
+var _user$project$Messages$SetSorting = function (a) {
+	return {ctor: 'SetSorting', _0: a};
+};
 var _user$project$Messages$UpdateInput = function (a) {
 	return {ctor: 'UpdateInput', _0: a};
 };
@@ -11312,6 +11325,14 @@ var _user$project$Update$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{searchInput: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetSorting':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{sorting: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SetPatients':
@@ -11371,6 +11392,32 @@ var _user$project$View$viewPatient = function (patient) {
 			}
 		});
 };
+var _user$project$View$patientsComparator = F3(
+	function (sorting, patient1, patient2) {
+		var _p0 = sorting;
+		switch (_p0.ctor) {
+			case 'None':
+				return _elm_lang$core$Basics$EQ;
+			case 'Asc':
+				switch (_p0._0.ctor) {
+					case 'FirstName':
+						return A2(_elm_lang$core$Basics$compare, patient1.firstName, patient2.firstName);
+					case 'LastName':
+						return A2(_elm_lang$core$Basics$compare, patient1.lastName, patient2.lastName);
+					default:
+						return A2(_justinmimbs$elm_date_extra$Date_Extra$compare, patient1.dob, patient2.dob);
+				}
+			default:
+				switch (_p0._0.ctor) {
+					case 'FirstName':
+						return A2(_elm_lang$core$Basics$compare, patient2.firstName, patient1.firstName);
+					case 'LastName':
+						return A2(_elm_lang$core$Basics$compare, patient2.lastName, patient1.lastName);
+					default:
+						return A2(_justinmimbs$elm_date_extra$Date_Extra$compare, patient2.dob, patient1.dob);
+				}
+		}
+	});
 var _user$project$View$filterBySearch = F2(
 	function (searchInput, patient) {
 		var ciContains = function (string) {
@@ -11403,8 +11450,49 @@ var _user$project$View$viewTable = function (model) {
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Last name'),
-									_1: {ctor: '[]'}
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Last name'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Messages$SetSorting(
+														_user$project$Model$Asc(_user$project$Model$LastName))),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Asc'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Messages$SetSorting(
+															_user$project$Model$Desc(_user$project$Model$LastName))),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Desc'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
 								}),
 							_1: {
 								ctor: '::',
@@ -11413,8 +11501,49 @@ var _user$project$View$viewTable = function (model) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('First name'),
-										_1: {ctor: '[]'}
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('First name'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Messages$SetSorting(
+															_user$project$Model$Asc(_user$project$Model$FirstName))),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Asc'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Messages$SetSorting(
+																_user$project$Model$Desc(_user$project$Model$FirstName))),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Desc'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
 									}),
 								_1: {
 									ctor: '::',
@@ -11423,8 +11552,49 @@ var _user$project$View$viewTable = function (model) {
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Date of Birth'),
-											_1: {ctor: '[]'}
+											_0: A2(
+												_elm_lang$html$Html$span,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Date of Birth'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Messages$SetSorting(
+																_user$project$Model$Asc(_user$project$Model$Dob))),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Asc'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$button,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(
+																_user$project$Messages$SetSorting(
+																	_user$project$Model$Desc(_user$project$Model$Dob))),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Desc'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
 										}),
 									_1: {ctor: '[]'}
 								}
@@ -11441,9 +11611,12 @@ var _user$project$View$viewTable = function (model) {
 						_elm_lang$core$List$map,
 						_user$project$View$viewPatient,
 						A2(
-							_elm_lang$core$List$filter,
-							_user$project$View$filterBySearch(model.searchInput),
-							model.patients))),
+							_elm_lang$core$List$sortWith,
+							_user$project$View$patientsComparator(model.sorting),
+							A2(
+								_elm_lang$core$List$filter,
+								_user$project$View$filterBySearch(model.searchInput),
+								model.patients)))),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -11517,7 +11690,8 @@ var _user$project$Main$initialModel = {
 	searchInput: '',
 	patients: {ctor: '[]'},
 	pageSize: 10,
-	currentPage: 0
+	currentPage: 0,
+	sorting: _user$project$Model$None
 };
 var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$initialModel, _1: _user$project$ApiGet$getInitialData};
 var _user$project$Main$subscriptions = function (model) {

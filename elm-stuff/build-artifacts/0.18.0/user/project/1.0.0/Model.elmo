@@ -1,8 +1,18 @@
-var _user$project$Model$Model = F4(
-	function (a, b, c, d) {
-		return {searchInput: a, patients: b, pageSize: c, currentPage: d};
+var _user$project$Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {searchInput: a, patients: b, pageSize: c, currentPage: d, sorting: e};
 	});
 var _user$project$Model$Patient = F3(
 	function (a, b, c) {
 		return {lastName: a, firstName: b, dob: c};
 	});
+var _user$project$Model$None = {ctor: 'None'};
+var _user$project$Model$Desc = function (a) {
+	return {ctor: 'Desc', _0: a};
+};
+var _user$project$Model$Asc = function (a) {
+	return {ctor: 'Asc', _0: a};
+};
+var _user$project$Model$Dob = {ctor: 'Dob'};
+var _user$project$Model$LastName = {ctor: 'LastName'};
+var _user$project$Model$FirstName = {ctor: 'FirstName'};

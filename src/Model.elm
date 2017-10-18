@@ -8,7 +8,20 @@ type alias Model =
     , patients : List Patient
     , pageSize : Int
     , currentPage : Int
+    , sorting : Sorting
     }
+
+
+type Sorting
+    = Asc Column
+    | Desc Column
+    | None
+
+
+type Column
+    = FirstName
+    | LastName
+    | Dob
 
 
 type alias Patient =

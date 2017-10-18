@@ -10,6 +10,14 @@ update msg model =
         UpdateInput searchInput ->
             ( { model | searchInput = searchInput }, Cmd.none )
 
+        SetSorting sorting ->
+            ( { model | sorting = sorting }, Cmd.none )
+
+        -- let
+        --   case column of
+        --
+        -- in
+        --   ( { model | sorting = sorting }, Cmd.none )
         SetPatients (Err e) ->
             let
                 x =
