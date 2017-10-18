@@ -1,20 +1,29 @@
 var _user$project$Update$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'SetPatients') {
-			if (_p0._0.ctor === 'Err') {
-				var x = A2(_elm_lang$core$Debug$log, 'x', _p0._0._0);
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			} else {
+		switch (_p0.ctor) {
+			case 'UpdateInput':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{patients: _p0._0._0}),
+						{searchInput: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			}
-		} else {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'SetPatients':
+				if (_p0._0.ctor === 'Err') {
+					var x = A2(_elm_lang$core$Debug$log, 'x', _p0._0._0);
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{patients: _p0._0._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});

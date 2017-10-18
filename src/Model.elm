@@ -6,6 +6,8 @@ import Date
 type alias Model =
     { searchInput : String
     , patients : List Patient
+    , pageSize : Int
+    , currentPage : Int
     }
 
 

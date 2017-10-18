@@ -5,7 +5,7 @@ import Http
 
 
 type Msg
-    = UpdateInput
+    = UpdateInput String
     | NextPage
     | PreviousPage
     | SetPatients (Result Http.Error (List Patient))

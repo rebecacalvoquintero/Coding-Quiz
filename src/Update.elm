@@ -7,6 +7,9 @@ import Model exposing (..)
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        UpdateInput searchInput ->
+            ( { model | searchInput = searchInput }, Cmd.none )
+
         SetPatients (Err e) ->
             let
                 x =

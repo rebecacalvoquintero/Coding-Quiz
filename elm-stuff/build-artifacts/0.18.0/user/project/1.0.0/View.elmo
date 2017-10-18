@@ -38,6 +38,17 @@ var _user$project$View$viewPatient = function (patient) {
 			}
 		});
 };
+var _user$project$View$filterBySearch = F2(
+	function (searchInput, patient) {
+		var ciContains = function (string) {
+			return A2(
+				_elm_lang$core$String$contains,
+				_elm_lang$core$String$toLower(searchInput),
+				_elm_lang$core$String$toLower(string));
+		};
+		return ciContains(patient.firstName) || (ciContains(patient.lastName) || ciContains(
+			A2(_justinmimbs$elm_date_extra$Date_Extra$toFormattedString, 'd MMMM, y', patient.dob)));
+	});
 var _user$project$View$viewTable = function (model) {
 	return A2(
 		_elm_lang$html$Html$table,
@@ -93,8 +104,43 @@ var _user$project$View$viewTable = function (model) {
 				_0: A2(
 					_elm_lang$html$Html$tbody,
 					{ctor: '[]'},
-					A2(_elm_lang$core$List$map, _user$project$View$viewPatient, model.patients)),
-				_1: {ctor: '[]'}
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$View$viewPatient,
+						A2(
+							_elm_lang$core$List$filter,
+							_user$project$View$filterBySearch(model.searchInput),
+							model.patients))),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$tfoot,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('previous'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('next'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -116,7 +162,15 @@ var _user$project$View$view = function (model) {
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$input,
-					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$UpdateInput),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$value(model.searchInput),
+							_1: {ctor: '[]'}
+						}
+					},
 					{ctor: '[]'}),
 				_1: {
 					ctor: '::',

@@ -20,7 +20,7 @@ var _user$project$ApiGet$initialDataDecoder = A2(
 	},
 	_elm_lang$core$Json_Decode$list(_user$project$ApiGet$patientDecoder));
 var _user$project$ApiGet$getInitialData = function () {
-	var url = 'https://api.interview.healthforge.io:443/api/patient';
+	var url = 'https://api.interview.healthforge.io:443/api/patient?size=1000';
 	var request = A2(_elm_lang$http$Http$get, url, _user$project$ApiGet$initialDataDecoder);
 	return A2(_elm_lang$http$Http$send, _user$project$Messages$SetPatients, request);
 }();

@@ -1,6 +1,8 @@
 var _user$project$Main$initialModel = {
 	searchInput: '',
-	patients: {ctor: '[]'}
+	patients: {ctor: '[]'},
+	pageSize: 10,
+	currentPage: 0
 };
 var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$initialModel, _1: _user$project$ApiGet$getInitialData};
 var _user$project$Main$subscriptions = function (model) {

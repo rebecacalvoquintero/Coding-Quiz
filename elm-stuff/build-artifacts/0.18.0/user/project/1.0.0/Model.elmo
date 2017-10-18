@@ -1,6 +1,6 @@
-var _user$project$Model$Model = F2(
-	function (a, b) {
-		return {searchInput: a, patients: b};
+var _user$project$Model$Model = F4(
+	function (a, b, c, d) {
+		return {searchInput: a, patients: b, pageSize: c, currentPage: d};
 	});
 var _user$project$Model$Patient = F3(
 	function (a, b, c) {

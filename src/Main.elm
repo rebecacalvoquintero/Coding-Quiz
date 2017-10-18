@@ -8,6 +8,7 @@ import View exposing (view)
 import ApiGet
 
 
+subscriptions : a -> Sub msg
 subscriptions model =
     Sub.none
 
@@ -22,6 +23,7 @@ main =
         }
 
 
+init : ( Model, Cmd Msg )
 init =
     ( initialModel, ApiGet.getInitialData )
 
@@ -30,4 +32,6 @@ initialModel : Model
 initialModel =
     { searchInput = ""
     , patients = []
+    , pageSize = 10
+    , currentPage = 0
     }

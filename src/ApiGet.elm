@@ -13,7 +13,7 @@ getInitialData : Cmd Msg
 getInitialData =
     let
         url =
-            "https://api.interview.healthforge.io:443/api/patient"
+            "https://api.interview.healthforge.io:443/api/patient?size=1000"
 
         request =
             Http.get url initialDataDecoder
