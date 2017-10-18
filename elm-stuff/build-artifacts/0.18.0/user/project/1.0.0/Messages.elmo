@@ -1,0 +1,6 @@
+var _user$project$Messages$SetPatients = function (a) {
+	return {ctor: 'SetPatients', _0: a};
+};
+var _user$project$Messages$PreviousPage = {ctor: 'PreviousPage'};
+var _user$project$Messages$NextPage = {ctor: 'NextPage'};
+var _user$project$Messages$UpdateInput = {ctor: 'UpdateInput'};

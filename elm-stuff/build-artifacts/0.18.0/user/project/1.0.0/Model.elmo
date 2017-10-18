@@ -1,0 +1,8 @@
+var _user$project$Model$Model = F2(
+	function (a, b) {
+		return {searchInput: a, patients: b};
+	});
+var _user$project$Model$Patient = F3(
+	function (a, b, c) {
+		return {lastName: a, firstName: b, dob: c};
+	});

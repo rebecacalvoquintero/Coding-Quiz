@@ -1,0 +1,26 @@
+var _user$project$ApiGet$patientDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'dateOfBirth',
+	_elm_community$json_extra$Json_Decode_Extra$date,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'firstName',
+		_elm_lang$core$Json_Decode$string,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'lastName',
+			_elm_lang$core$Json_Decode$string,
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Model$Patient))));
+var _user$project$ApiGet$initialDataDecoder = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'content',
+		_1: {ctor: '[]'}
+	},
+	_elm_lang$core$Json_Decode$list(_user$project$ApiGet$patientDecoder));
+var _user$project$ApiGet$getInitialData = function () {
+	var url = 'https://api.interview.healthforge.io:443/api/patient';
+	var request = A2(_elm_lang$http$Http$get, url, _user$project$ApiGet$initialDataDecoder);
+	return A2(_elm_lang$http$Http$send, _user$project$Messages$SetPatients, request);
+}();
