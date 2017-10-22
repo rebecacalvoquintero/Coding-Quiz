@@ -21,10 +21,6 @@ getInitialData =
         Http.send SetPatients request
 
 
-type alias Patients =
-    List Patient
-
-
 initialDataDecoder : Decode.Decoder (List Patient)
 initialDataDecoder =
     Decode.at [ "content" ] (Decode.list patientDecoder)
@@ -36,3 +32,13 @@ patientDecoder =
         |> required "lastName" Decode.string
         |> required "firstName" Decode.string
         |> required "dateOfBirth" date
+        |> required "gender" Decode.string
+        |> required "prefix" Decode.string
+        |> required "telecoms" (Decode.list telecomDecoder)
+
+
+telecomDecoder : Decode.Decoder Telecom
+telecomDecoder =
+    decode Telecom
+        |> required "usage" Decode.string
+        |> required "value" Decode.string

@@ -1,10 +1,14 @@
-var _user$project$Model$Model = F5(
-	function (a, b, c, d, e) {
-		return {searchInput: a, patients: b, pageSize: c, currentPage: d, sorting: e};
+var _user$project$Model$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {searchInput: a, patients: b, pageSize: c, currentPage: d, sorting: e, focusedPatientId: f};
 	});
-var _user$project$Model$Patient = F3(
-	function (a, b, c) {
-		return {lastName: a, firstName: b, dob: c};
+var _user$project$Model$Patient = F6(
+	function (a, b, c, d, e, f) {
+		return {lastName: a, firstName: b, dob: c, gender: d, title: e, telecoms: f};
+	});
+var _user$project$Model$Telecom = F2(
+	function (a, b) {
+		return {usage: a, value: b};
 	});
 var _user$project$Model$None = {ctor: 'None'};
 var _user$project$Model$Desc = function (a) {
