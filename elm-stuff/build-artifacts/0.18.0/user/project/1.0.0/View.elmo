@@ -404,84 +404,95 @@ var _user$project$View$viewTable = function (model) {
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('center mw6 ma4'),
+						_0: _elm_lang$html$Html_Attributes$class('footerContainerParent'),
 						_1: {ctor: '[]'}
 					},
-					function () {
-						var pageDropdown = A2(
-							_elm_lang$html$Html$select,
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('f3 pa2 ma2 ml5'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$SetPage),
-									_1: {ctor: '[]'}
-								}
+								_0: _elm_lang$html$Html_Attributes$class('center footerContainer'),
+								_1: {ctor: '[]'}
 							},
-							A2(
-								_elm_lang$core$List$map,
-								function (n) {
-									return A2(
-										_elm_lang$html$Html$option,
-										{
+							function () {
+								var pageDropdown = A2(
+									_elm_lang$html$Html$select,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('page-dropdown f3 pa2'),
+										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$selected(
-												_elm_lang$core$Native_Utils.eq(n - 1, model.currentPage)),
+											_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$SetPage),
+											_1: {ctor: '[]'}
+										}
+									},
+									A2(
+										_elm_lang$core$List$map,
+										function (n) {
+											return A2(
+												_elm_lang$html$Html$option,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$selected(
+														_elm_lang$core$Native_Utils.eq(n - 1, model.currentPage)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$value(
+															_elm_lang$core$Basics$toString(n)),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														_elm_lang$core$Basics$toString(n)),
+													_1: {ctor: '[]'}
+												});
+										},
+										pages));
+								var next = A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Messages$NextPage),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$disabled(!morePatientsAfterPage),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$value(
-													_elm_lang$core$Basics$toString(n)),
+												_0: _elm_lang$html$Html_Attributes$class('next shadow-hover button next f3 pa2 ma2 fr'),
 												_1: {ctor: '[]'}
 											}
-										},
-										{
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('next'),
+										_1: {ctor: '[]'}
+									});
+								var previous = A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Messages$PreviousPage),
+										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(
-												_elm_lang$core$Basics$toString(n)),
-											_1: {ctor: '[]'}
-										});
-								},
-								pages));
-						var next = A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(_user$project$Messages$NextPage),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('shadow-hover button next f3 pa2 ma2 fr'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('next'),
-								_1: {ctor: '[]'}
-							});
-						var previous = A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(_user$project$Messages$PreviousPage),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('shadow-hover button previous f3 pa2 ma2 fl'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('previous'),
-								_1: {ctor: '[]'}
-							});
-						var _p1 = {
-							ctor: '_Tuple2',
-							_0: !_elm_lang$core$Native_Utils.eq(model.currentPage, 0),
-							_1: morePatientsAfterPage
-						};
-						if (_p1._0 === true) {
-							if (_p1._1 === true) {
+											_0: _elm_lang$html$Html_Attributes$disabled(
+												_elm_lang$core$Native_Utils.eq(model.currentPage, 0)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('previous shadow-hover button previous f3 pa2 ma2 fl'),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('previous'),
+										_1: {ctor: '[]'}
+									});
 								return {
 									ctor: '::',
 									_0: previous,
@@ -495,33 +506,9 @@ var _user$project$View$viewTable = function (model) {
 										}
 									}
 								};
-							} else {
-								return {
-									ctor: '::',
-									_0: pageDropdown,
-									_1: {
-										ctor: '::',
-										_0: previous,
-										_1: {ctor: '[]'}
-									}
-								};
-							}
-						} else {
-							if (_p1._1 === true) {
-								return {
-									ctor: '::',
-									_0: pageDropdown,
-									_1: {
-										ctor: '::',
-										_0: next,
-										_1: {ctor: '[]'}
-									}
-								};
-							} else {
-								return {ctor: '[]'};
-							}
-						}
-					}()),
+							}()),
+						_1: {ctor: '[]'}
+					}),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -576,8 +563,8 @@ var _user$project$View$view = function (model) {
 			_1: {
 				ctor: '::',
 				_0: function () {
-					var _p2 = model.focusedPatientId;
-					if (_p2.ctor === 'Nothing') {
+					var _p1 = model.focusedPatientId;
+					if (_p1.ctor === 'Nothing') {
 						return A2(
 							_elm_lang$html$Html$div,
 							{ctor: '[]'},
@@ -610,7 +597,7 @@ var _user$project$View$view = function (model) {
 								}
 							});
 					} else {
-						return A2(_user$project$ViewPatient$view, model, _p2._0);
+						return A2(_user$project$ViewPatient$view, model, _p1._0);
 					}
 				}(),
 				_1: {ctor: '[]'}
