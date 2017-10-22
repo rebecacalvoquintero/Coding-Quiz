@@ -7,50 +7,129 @@ import Messages exposing (..)
 import Date.Extra exposing (toFormattedString)
 import Html.Events exposing (..)
 import Date.Extra
+import ViewPatient
 
 
 view : Model -> Html Msg
 view model =
     section []
-        [ span [] [ text "search" ]
-        , input [ onInput UpdateInput, value model.searchInput ] []
-        , viewTable model
+        [ viewNavBar model
+
+        -- case model.focusedPatientId of
+        --   Nothing ->
+        , (case model.focusedPatientId of
+            Nothing ->
+                div
+                    []
+                    [ input
+                        [ onInput UpdateInput
+                        , value model.searchInput
+                        , class "searchBar center db w-75 w-50-m w-33-l f3 pa2 ma4"
+                        , placeholder "start your search"
+                        ]
+                        []
+                    , viewTable model
+                    ]
+
+            Just id ->
+                ViewPatient.view model id
+          )
+        ]
+
+
+viewNavBar : Model -> Html Msg
+viewNavBar model =
+    div [ class "navBar w-100 h4 tc f3 white" ]
+        [ img [ src "../assets/healthforge_logo.png", class "logo tc" ] []
+        , h1 [ class "title ma1 pa2" ] [ text "healthForge" ]
         ]
 
 
 viewTable : Model -> Html Msg
 viewTable model =
-    table []
-        [ thead []
-            [ tr []
-                [ th []
-                    [ span [] [ text "Last name" ]
-                    , button [ onClick (SetSorting (Asc LastName)) ] [ text "Asc" ]
-                    , button [ onClick (SetSorting (Desc LastName)) ] [ text "Desc" ]
+    let
+        filteredPatients =
+            List.filter (filterBySearch model.searchInput) model.patients
+
+        patientsOnPage =
+            List.drop (model.pageSize * model.currentPage) filteredPatients
+                |> List.take model.pageSize
+
+        morePatientsAfterPage =
+            ((model.currentPage + 1) * model.pageSize) < List.length filteredPatients
+
+        pageCount =
+            ceiling (toFloat (List.length filteredPatients) / toFloat model.pageSize)
+
+        pages =
+            List.range 1 pageCount
+    in
+        div []
+            [ table [ class "center" ]
+                [ thead [ class "tableBox" ]
+                    [ tr []
+                        [ th [ class "tableHeader f4 br5 pa3" ]
+                            [ span [ class "borderbox fl ma2 tc" ] [ text "Last name" ]
+                            , button [ onClick (SetSorting (Asc LastName)) ] [ img [ class "image tc", src "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2014/png/iconmonstr-sort-13.png&r=0&g=0&b=0" ] [] ]
+                            , button [ onClick (SetSorting (Desc LastName)) ] [ img [ class "image tc", src "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2014/png/iconmonstr-sort-16.png&r=0&g=0&b=0" ] [] ]
+                            ]
+                        , th [ class " tableHeader f4 br5 pa3" ]
+                            [ span [ class "borderbox fl ma2 tc" ] [ text "First name" ]
+                            , button [ onClick (SetSorting (Asc FirstName)) ] [ img [ class "image tc", src "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2014/png/iconmonstr-sort-13.png&r=0&g=0&b=0" ] [] ]
+                            , button [ onClick (SetSorting (Desc FirstName)) ] [ img [ class "image tc", src "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2014/png/iconmonstr-sort-16.png&r=0&g=0&b=0" ] [] ]
+                            ]
+                        , th [ class " tableHeader f4 br5 pa3" ]
+                            [ span [ class "borderbox fl ma2 tc" ] [ text "Date of Birth" ]
+                            , button [ src "", onClick (SetSorting (Asc Dob)) ] [ img [ class "image", src "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2014/png/iconmonstr-sort-18.png&r=0&g=0&b=0" ] [] ]
+                            , button [ onClick (SetSorting (Desc Dob)) ] [ img [ class "image", src "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2014/png/iconmonstr-sort-20.png&r=0&g=0&b=0" ] [] ]
+                            ]
+                        ]
                     ]
-                , th []
-                    [ span [] [ text "First name" ]
-                    , button [ onClick (SetSorting (Asc FirstName)) ] [ text "Asc" ]
-                    , button [ onClick (SetSorting (Desc FirstName)) ] [ text "Desc" ]
-                    ]
-                , th []
-                    [ span [] [ text "Date of Birth" ]
-                    , button [ onClick (SetSorting (Asc Dob)) ] [ text "Asc" ]
-                    , button [ onClick (SetSorting (Desc Dob)) ] [ text "Desc" ]
-                    ]
+                , tbody [ class "tableBody ma2 f5 ma2 br5 pa2" ]
+                    (List.map viewPatientRow <|
+                        List.sortWith (patientsComparator model.sorting) <|
+                            patientsOnPage
+                    )
                 ]
+            , div [ class "center mw6 ma4" ]
+                (let
+                    previous =
+                        button [ onClick PreviousPage, class "shadow-hover button previous f3 pa2 ma2 fl" ] [ text "previous" ]
+
+                    next =
+                        button [ onClick NextPage, class "shadow-hover button next f3 pa2 ma2 fr" ] [ text "next" ]
+
+                    pageDropdown =
+                        select [ class "f3 pa2 ma2 ml5", onInput SetPage ]
+                            (List.map
+                                (\n ->
+                                    option
+                                        [ selected (n - 1 == model.currentPage)
+                                        , value (toString n)
+                                        ]
+                                        [ text (toString n) ]
+                                )
+                                pages
+                            )
+                 in
+                    (case ( model.currentPage /= 0, morePatientsAfterPage ) of
+                        ( True, True ) ->
+                            [ previous
+                            , pageDropdown
+                            , next
+                            ]
+
+                        ( False, True ) ->
+                            [ pageDropdown, next ]
+
+                        ( True, False ) ->
+                            [ pageDropdown, previous ]
+
+                        ( False, False ) ->
+                            []
+                    )
+                )
             ]
-        , tbody []
-            (List.map viewPatient <|
-                List.sortWith (patientsComparator model.sorting) <|
-                    List.filter (filterBySearch model.searchInput)
-                        model.patients
-            )
-        , tfoot []
-            [ button [] [ text "previous" ]
-            , button [] [ text "next" ]
-            ]
-        ]
 
 
 filterBySearch : String -> Patient -> Bool
@@ -87,9 +166,9 @@ patientsComparator sorting patient1 patient2 =
             Date.Extra.compare patient2.dob patient1.dob
 
 
-viewPatient : Patient -> Html Msg
-viewPatient patient =
-    tr []
+viewPatientRow : Patient -> Html Msg
+viewPatientRow patient =
+    tr [ onClick (SetFocusedPatient patient), class "shadow-hover" ]
         [ td [] [ text patient.lastName ]
         , td [] [ text patient.firstName ]
         , td [] [ text (toFormattedString "d MMMM, y" patient.dob) ]

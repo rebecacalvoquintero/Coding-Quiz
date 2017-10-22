@@ -7,7 +7,7 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{searchInput: _p0._0}),
+						{searchInput: _p0._0, currentPage: 0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SetSorting':
@@ -16,6 +16,38 @@ var _user$project$Update$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{sorting: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PreviousPage':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{currentPage: model.currentPage - 1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'NextPage':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{currentPage: model.currentPage + 1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetPage':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							currentPage: function (n) {
+								return n - 1;
+							}(
+								A2(
+									_elm_lang$core$Result$withDefault,
+									model.currentPage,
+									_elm_lang$core$String$toInt(_p0._0)))
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SetPatients':
@@ -31,7 +63,23 @@ var _user$project$Update$update = F2(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
+			case 'SetFocusedPatient':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							focusedPatientId: _elm_lang$core$Maybe$Just(_p0._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			default:
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{focusedPatientId: _elm_lang$core$Maybe$Nothing}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});

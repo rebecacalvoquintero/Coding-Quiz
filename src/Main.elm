@@ -35,4 +35,5 @@ initialModel =
     , pageSize = 10
     , currentPage = 0
     , sorting = None
+    , focusedPatientId = Nothing
     }

@@ -9,6 +9,7 @@ type alias Model =
     , pageSize : Int
     , currentPage : Int
     , sorting : Sorting
+    , focusedPatientId : Maybe Patient
     }
 
 
@@ -28,4 +29,13 @@ type alias Patient =
     { lastName : String
     , firstName : String
     , dob : Date.Date
+    , gender : String
+    , title : String
+    , telecoms : List Telecom
+    }
+
+
+type alias Telecom =
+    { usage : String
+    , value : String
     }
