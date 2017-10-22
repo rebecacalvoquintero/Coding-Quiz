@@ -91,44 +91,45 @@ viewTable model =
                             patientsOnPage
                     )
                 ]
-            , div [ class "center mw6 ma4" ]
-                (let
-                    previous =
-                        button [ onClick PreviousPage, class "shadow-hover button previous f3 pa2 ma2 fl" ] [ text "previous" ]
+            , div [ class "footerContainerParent" ]
+                [ div [ class "center footerContainer" ]
+                    (let
+                        previous =
+                            button
+                                [ onClick PreviousPage
+                                , disabled (model.currentPage == 0)
+                                , class
+                                    "previous shadow-hover button previous f3 pa2 ma2 fl"
+                                ]
+                                [ text "previous" ]
 
-                    next =
-                        button [ onClick NextPage, class "shadow-hover button next f3 pa2 ma2 fr" ] [ text "next" ]
+                        next =
+                            button
+                                [ onClick NextPage
+                                , disabled (not morePatientsAfterPage)
+                                , class "next shadow-hover button next f3 pa2 ma2 fr"
+                                ]
+                                [ text "next" ]
 
-                    pageDropdown =
-                        select [ class "f3 pa2 ma2 ml5", onInput SetPage ]
-                            (List.map
-                                (\n ->
-                                    option
-                                        [ selected (n - 1 == model.currentPage)
-                                        , value (toString n)
-                                        ]
-                                        [ text (toString n) ]
+                        pageDropdown =
+                            select [ class "page-dropdown f3 pa2", onInput SetPage ]
+                                (List.map
+                                    (\n ->
+                                        option
+                                            [ selected (n - 1 == model.currentPage)
+                                            , value (toString n)
+                                            ]
+                                            [ text (toString n) ]
+                                    )
+                                    pages
                                 )
-                                pages
-                            )
-                 in
-                    (case ( model.currentPage /= 0, morePatientsAfterPage ) of
-                        ( True, True ) ->
-                            [ previous
-                            , pageDropdown
-                            , next
-                            ]
-
-                        ( False, True ) ->
-                            [ pageDropdown, next ]
-
-                        ( True, False ) ->
-                            [ pageDropdown, previous ]
-
-                        ( False, False ) ->
-                            []
+                     in
+                        [ previous
+                        , pageDropdown
+                        , next
+                        ]
                     )
-                )
+                ]
             ]
 
 
