@@ -1,0 +1,70 @@
+body {
+  font-family: 'Saira', sans-serif;
+}
+
+.navBar {
+  background-color: #4286D3;
+  color: white;
+}
+
+.tableHeader {
+ font-weight:400;
+ color: black;
+border-top:2px solid #858d99;
+background-color: #4286D3;
+}
+
+.image {
+  width: 1rem;
+}
+
+.searchBar {
+  background-color: #F5DD90;
+}
+.tableBody {
+  border-top:2px solid black;
+  font-weight:350;
+}
+
+.button {
+  color: #4286D3;
+}
+
+.button:disabled {
+  color: grey;
+  cursor: inherit;
+}
+
+.footerContainerParent{
+  position: absolute;
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.footerContainer{
+  max-width: 44rem;
+}
+.previous {
+  position: relative;
+  margin-left: 4rem;
+}
+
+.page-dropdown {
+  left: 20%;
+  position: relative;
+}
+
+.next {
+  position: relative;
+  margin-right: 4rem;
+}
+
+.firstPage {
+  background-color: #4286D3;
+  height: 100vh;
+}
+
+.submitButton {
+  background-color: #F5DD90;
+  color: #4286D3;
+}
