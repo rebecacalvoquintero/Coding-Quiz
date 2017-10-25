@@ -1,0 +1,22 @@
+{
+  "name": "question_two",
+  "version": "1.0.0",
+  "description": "coding quiz",
+  "main": "elm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon server/index.js",
+    "elmLive": "elm-live src/Main.elm --output=public/elm.js --debug"
+  },
+  "author": "rebeca calvo",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "path": "^0.12.7",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0"
+  }
+}
