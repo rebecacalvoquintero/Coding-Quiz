@@ -1,5 +1,6 @@
 module Update exposing (update)
 
+import Auth
 import Messages exposing (..)
 import Model exposing (..)
 
@@ -45,3 +46,12 @@ update msg model =
 
         UnfocusPatient ->
             ( { model | focusedPatientId = Nothing }, Cmd.none )
+
+        UpdateUsername username ->
+            ( { model | username = username }, Cmd.none )
+
+        UpdatePassword password ->
+            ( { model | password = password }, Cmd.none )
+
+        Login ->
+            ( model, Auth.login model.username model.password )

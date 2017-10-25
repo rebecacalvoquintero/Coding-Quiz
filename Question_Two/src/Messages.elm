@@ -13,3 +13,6 @@ type Msg
     | SetPatients (Result Http.Error (List Patient))
     | SetFocusedPatient Patient
     | UnfocusPatient
+    | UpdateUsername String
+    | UpdatePassword String
+    | Login

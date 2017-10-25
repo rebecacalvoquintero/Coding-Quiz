@@ -10,6 +10,9 @@ type alias Model =
     , currentPage : Int
     , sorting : Sorting
     , focusedPatientId : Maybe Patient
+    , username : String
+    , password : String
+    , token : String
     }
 
 

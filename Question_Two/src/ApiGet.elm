@@ -3,7 +3,6 @@ module ApiGet exposing (..)
 import Http exposing (get)
 import Messages exposing (..)
 import Model exposing (..)
-import Date
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (required, optional, decode, hardcoded)
 import Json.Decode.Extra exposing (date)

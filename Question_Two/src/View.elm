@@ -22,11 +22,11 @@ viewLogin : Html Msg
 viewLogin =
     div
         [ class "firstPage" ]
-        [ header [ class "white f1 mb5 tc tracked pa4" ] [ text "healthForge" ]
+        [ header [ class "white f1 mb5 tc tracked pa4" ] [ text "HealthForge" ]
         , section []
-            [ Html.form [ class "login center mt4 pa2 ", method "POST" ]
-                [ input [ class "inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center", id "email", type_ "email", placeholder "email", name "email" ] []
-                , input [ class "inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center", id "password", name "password", type_ "password", placeholder "password" ] []
+            [ Html.form [ class "login center mt4 pa2 ", onSubmit Login ]
+                [ input [ onInput UpdateUsername, class "inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center", id "email", type_ "email", placeholder "email", name "email" ] []
+                , input [ onInput UpdatePassword, class "inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center", id "password", name "password", type_ "password", placeholder "password" ] []
                 , button [ class "submitButton f4 w-100 h3 pa1 bn mb2 mw6 db center", type_ "submit", name "submit" ] [ text "Login" ]
                 ]
             ]
