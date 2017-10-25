@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "devStart": "nodemon server/index.js",
+    "start" : "elm-make src/Main.elm --output=public/elm.js && node server/index.js" ,
     "elmLive": "elm-live src/Main.elm --output=public/elm.js --debug"
   },
   "author": "rebeca calvo",
