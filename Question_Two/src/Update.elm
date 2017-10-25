@@ -55,3 +55,14 @@ update msg model =
 
         Login ->
             ( model, Auth.login model.username model.password )
+
+        --  TODO: Destructure errors to give more detailed reasons for login fails
+        HandleAuthReply (Err _) ->
+            ( { model | loginError = Just "Sorry, login failed" }, Cmd.none )
+
+        HandleAuthReply (Ok token) ->
+            let
+                x =
+                    Debug.log "http result" token
+            in
+                ( { model | token = token, loggedIn = True }, Cmd.none )

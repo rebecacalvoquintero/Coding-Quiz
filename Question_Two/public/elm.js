@@ -15268,10 +15268,52 @@ var _justinmimbs$elm_date_extra$Date_Extra$equalBy = F3(
 var _justinmimbs$elm_date_extra$Date_Extra$Second = {ctor: 'Second'};
 var _justinmimbs$elm_date_extra$Date_Extra$Millisecond = {ctor: 'Millisecond'};
 
-var _user$project$Model$Model = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {searchInput: a, patients: b, pageSize: c, currentPage: d, sorting: e, focusedPatientId: f, username: g, password: h, token: i};
-	});
+var _krisajenkins$elm_exts$Exts_Http$cgiParameter = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$http$Http$encodeUri(_p1._0),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'=',
+			_elm_lang$http$Http$encodeUri(_p1._1)));
+};
+var _krisajenkins$elm_exts$Exts_Http$cgiParameters = function (_p2) {
+	return A2(
+		_elm_lang$core$String$join,
+		'&',
+		A2(_elm_lang$core$List$map, _krisajenkins$elm_exts$Exts_Http$cgiParameter, _p2));
+};
+var _krisajenkins$elm_exts$Exts_Http$formBody = function (_p3) {
+	return A2(
+		_elm_lang$http$Http$stringBody,
+		'application/x-www-form-urlencoded',
+		_krisajenkins$elm_exts$Exts_Http$cgiParameters(_p3));
+};
+
+var _user$project$Model$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {searchInput: a, patients: b, pageSize: c, currentPage: d, sorting: e, focusedPatientId: f, username: g, password: h, token: i, loginError: j, loggedIn: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$Model$Patient = F6(
 	function (a, b, c, d, e, f) {
 		return {lastName: a, firstName: b, dob: c, gender: d, title: e, telecoms: f};
@@ -15291,6 +15333,9 @@ var _user$project$Model$Dob = {ctor: 'Dob'};
 var _user$project$Model$LastName = {ctor: 'LastName'};
 var _user$project$Model$FirstName = {ctor: 'FirstName'};
 
+var _user$project$Messages$HandleAuthReply = function (a) {
+	return {ctor: 'HandleAuthReply', _0: a};
+};
 var _user$project$Messages$Login = {ctor: 'Login'};
 var _user$project$Messages$UpdatePassword = function (a) {
 	return {ctor: 'UpdatePassword', _0: a};
@@ -15365,9 +15410,30 @@ var _user$project$ApiGet$getInitialData = function () {
 	return A2(_elm_lang$http$Http$send, _user$project$Messages$SetPatients, request);
 }();
 
+var _user$project$Auth$postReplyDecoder = A2(_elm_lang$core$Json_Decode$field, 'access_token', _elm_lang$core$Json_Decode$string);
 var _user$project$Auth$login = F2(
 	function (username, password) {
-		return _elm_lang$core$Platform_Cmd$none;
+		var body = _krisajenkins$elm_exts$Exts_Http$formBody(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'username', _1: username},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'password', _1: password},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'grant_type', _1: 'password'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'client_id', _1: 'interview'},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+		var url = 'https://auth.healthforge.io/auth/realms/interview/protocol/openid-connect/token';
+		var request = A3(_elm_lang$http$Http$post, url, body, _user$project$Auth$postReplyDecoder);
+		return A2(_elm_lang$http$Http$send, _user$project$Messages$HandleAuthReply, request);
 	});
 
 var _user$project$Update$update = F2(
@@ -15469,12 +15535,34 @@ var _user$project$Update$update = F2(
 						{password: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'Login':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
 					_1: A2(_user$project$Auth$login, model.username, model.password)
 				};
+			default:
+				if (_p0._0.ctor === 'Err') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								loginError: _elm_lang$core$Maybe$Just('Sorry, login failed')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					var _p1 = _p0._0._0;
+					var x = A2(_elm_lang$core$Debug$log, 'http result', _p1);
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{token: _p1, loggedIn: true}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
 		}
 	});
 
@@ -16381,91 +16469,81 @@ var _user$project$View$viewMain = function (model) {
 			}
 		});
 };
-var _user$project$View$viewLogin = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('firstPage'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$header,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('white f1 mb5 tc tracked pa4'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text('HealthForge'),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
+var _user$project$View$viewLogin = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('firstPage'),
+			_1: {ctor: '[]'}
+		},
+		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$section,
-				{ctor: '[]'},
+				_elm_lang$html$Html$header,
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$form,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('login center mt4 pa2 '),
-							_1: {
+					_0: _elm_lang$html$Html_Attributes$class('white f1 mb5 tc tracked pa4'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('HealthForge'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$section,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$form,
+							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onSubmit(_user$project$Messages$Login),
-								_1: {ctor: '[]'}
-							}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
+								_0: _elm_lang$html$Html_Attributes$class('login center mt4 pa2 '),
+								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$UpdateUsername),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$id('email'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$type_('email'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$placeholder('email'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$name('email'),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {
+									_0: _elm_lang$html$Html_Events$onSubmit(_user$project$Messages$Login),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$input,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$UpdatePassword),
+										_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$UpdateUsername),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$html$Html_Attributes$class('inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$id('password'),
+												_0: _elm_lang$html$Html_Attributes$id('email'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$name('password'),
+													_0: _elm_lang$html$Html_Attributes$placeholder('username'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$UpdatePassword),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('inputButton darkgray bg-white-40 w-100 h3 pa1 bn mb3 mw6 db pl2 center'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$id('password'),
 													_1: {
 														ctor: '::',
 														_0: _elm_lang$html$Html_Attributes$type_('password'),
@@ -16477,42 +16555,60 @@ var _user$project$View$viewLogin = A2(
 													}
 												}
 											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$button,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('submitButton f4 w-100 h3 pa1 bn mb2 mw6 db center'),
-											_1: {
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$type_('submit'),
+												_0: _elm_lang$html$Html_Attributes$class('submitButton f4 w-100 h3 pa1 bn mb2 mw6 db center'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$name('submit'),
-													_1: {ctor: '[]'}
+													_0: _elm_lang$html$Html_Attributes$type_('submit'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$name('submit'),
+														_1: {ctor: '[]'}
+													}
 												}
-											}
-										},
-										{
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Login'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Login'),
+											_0: function () {
+												var _p2 = model.loginError;
+												if (_p2.ctor === 'Nothing') {
+													return _elm_lang$html$Html$text('');
+												} else {
+													return A2(
+														_elm_lang$html$Html$div,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(_p2._0),
+															_1: {ctor: '[]'}
+														});
+												}
+											}(),
 											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
+										}
+									}
 								}
-							}
-						}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		}
-	});
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _user$project$View$view = function (model) {
-	return _user$project$View$viewLogin;
+	return model.loggedIn ? _user$project$View$viewMain(model) : _user$project$View$viewLogin(model);
 };
 
 var _user$project$Main$initialModel = {
@@ -16522,9 +16618,11 @@ var _user$project$Main$initialModel = {
 	currentPage: 0,
 	sorting: _user$project$Model$None,
 	focusedPatientId: _elm_lang$core$Maybe$Nothing,
-	username: 'interview',
-	password: 'Interview01',
-	token: 'https://auth.healthforge.io/auth/realms/interview/protocol/openid-connect/token'
+	username: '',
+	password: '',
+	token: '',
+	loginError: _elm_lang$core$Maybe$Nothing,
+	loggedIn: false
 };
 var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$initialModel, _1: _user$project$ApiGet$getInitialData};
 var _user$project$Main$subscriptions = function (model) {
@@ -16536,7 +16634,7 @@ var _user$project$Main$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Messages.Msg":{"args":[],"tags":{"NextPage":[],"UnfocusPatient":[],"UpdateUsername":["String"],"SetPage":["String"],"SetFocusedPatient":["Model.Patient"],"UpdateInput":["String"],"SetPatients":["Result.Result Http.Error (List Model.Patient)"],"PreviousPage":[],"SetSorting":["Model.Sorting"],"Login":[],"UpdatePassword":["String"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Date.Date":{"args":[],"tags":{"Date":[]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Model.Column":{"args":[],"tags":{"LastName":[],"Dob":[],"FirstName":[]}},"Model.Sorting":{"args":[],"tags":{"None":[],"Asc":["Model.Column"],"Desc":["Model.Column"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Model.Telecom":{"args":[],"type":"{ usage : String, value : String }"},"Model.Patient":{"args":[],"type":"{ lastName : String , firstName : String , dob : Date.Date , gender : String , title : String , telecoms : List Model.Telecom }"}},"message":"Messages.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Messages.Msg":{"args":[],"tags":{"NextPage":[],"UnfocusPatient":[],"UpdateUsername":["String"],"HandleAuthReply":["Result.Result Http.Error String"],"SetPage":["String"],"SetFocusedPatient":["Model.Patient"],"UpdateInput":["String"],"SetPatients":["Result.Result Http.Error (List Model.Patient)"],"PreviousPage":[],"SetSorting":["Model.Sorting"],"Login":[],"UpdatePassword":["String"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Date.Date":{"args":[],"tags":{"Date":[]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Model.Column":{"args":[],"tags":{"LastName":[],"Dob":[],"FirstName":[]}},"Model.Sorting":{"args":[],"tags":{"None":[],"Asc":["Model.Column"],"Desc":["Model.Column"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Model.Telecom":{"args":[],"type":"{ usage : String, value : String }"},"Model.Patient":{"args":[],"type":"{ lastName : String , firstName : String , dob : Date.Date , gender : String , title : String , telecoms : List Model.Telecom }"}},"message":"Messages.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

@@ -16,3 +16,4 @@ type Msg
     | UpdateUsername String
     | UpdatePassword String
     | Login
+    | HandleAuthReply (Result Http.Error String)

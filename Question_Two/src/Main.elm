@@ -36,7 +36,9 @@ initialModel =
     , currentPage = 0
     , sorting = None
     , focusedPatientId = Nothing
-    , username = "interview"
-    , password = "Interview01"
-    , token = "https://auth.healthforge.io/auth/realms/interview/protocol/openid-connect/token"
+    , username = ""
+    , password = ""
+    , token = ""
+    , loginError = Nothing
+    , loggedIn = False
     }

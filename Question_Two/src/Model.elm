@@ -13,6 +13,8 @@ type alias Model =
     , username : String
     , password : String
     , token : String
+    , loginError : Maybe String
+    , loggedIn : Bool
     }
 
 
